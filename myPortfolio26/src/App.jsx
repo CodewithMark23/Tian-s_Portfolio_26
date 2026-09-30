@@ -18,7 +18,7 @@ import ProjectsSection  from './sections/ProjectsSection';
 import ContactSection   from './sections/ContactSection';
 
 // Section IDs to track active state
-const SECTIONS = ['hero', 'about', 'about-name', 'education', 'skills', 'projects', 'contact'];
+const SECTIONS = ['hero', 'about', 'education', 'skills', 'projects', 'contact'];
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -46,9 +46,16 @@ export default function App() {
 
   return (
     <>
+      {/* ── Ticker (very top) ── */}
       <Ticker />
+
+      {/* ── Navbar ── */}
       <Navbar activeSection={activeSection} />
+
+      {/* ── Sidebar (fixed left) ── */}
       <Sidebar activeSection={activeSection} />
+
+      {/* ── Main content (offset for sidebar + navbar + ticker) ── */}
       <main className="page-layout" id="main-content">
         <HeroSection />
         <AboutSection />
@@ -57,6 +64,8 @@ export default function App() {
         <ProjectsSection />
         <ContactSection />
       </main>
+
+      {/* ── Footer ── */}
       <Footer />
     </>
   );

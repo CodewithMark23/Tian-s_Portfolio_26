@@ -5,28 +5,28 @@ const PROJECTS = [
   {
     num: '01',
     title: 'ROUTERS AND NAVIGATIONS',
-    desc: 'Exploring client-side routing patterns and navigation architecture in modern web applications.',
-    tags: ['React', 'React Router', 'UX Architecture'],
+    desc: 'Exploring client-side routing patterns and navigation flows using React Router. Covers nested routes, dynamic params, and protected routes.',
+    tags: ['React', 'React Router', 'Navigation'],
     href: 'https://drive.google.com/file/d/1W8amiYTnmi7PakUwcIWQNYeIeeZ8Q6S3/view',
   },
   {
     num: '02',
     title: 'SERVICE PLACEHOLDER & ERROR STATE',
-    desc: 'Designing and building resilient UI fallback states, service placeholders, and intuitive error screens.',
-    tags: ['UI/UX', 'Component Design', 'Error Handling'],
+    desc: 'UI patterns for handling loading skeletons, service placeholders, and graceful error states — essential for production-ready applications.',
+    tags: ['React', 'UX Patterns', 'Error Handling'],
     href: 'https://drive.google.com/file/d/1tp33iCOXlRetXtT1LiI3NYd8gdFSLLqK/view',
   },
   {
     num: '03',
     title: 'SIMPLE TASK MANAGER',
-    desc: 'A minimal, focused productivity tool for creating, tracking, and prioritizing everyday tasks and goals.',
-    tags: ['JavaScript', 'State Management', 'CRUD'],
+    desc: 'A clean and functional task manager app with CRUD operations, state management, and persistent local storage integration.',
+    tags: ['React', 'State Management', 'LocalStorage'],
     href: 'https://drive.google.com/file/d/1Sg5QPadGo79IFRFNlYm9dBAybSzE3Qy0/view',
   },
   {
     num: '04',
     title: 'DRUGS AND MEDICINE STORE',
-    desc: 'An organized inventory and catalog interface for pharmaceutical items with search and category filtering.',
+    desc: 'A pharmacy/medicine store front-end featuring product listings, search, filtering, and a shopping cart interface.',
     tags: ['React', 'E-Commerce', 'UI Design'],
     href: 'https://drive.google.com/file/d/1yM_O-aA43Kb2Pq3bbkAVqItdZEfzl2Tu/view',
   },
@@ -76,7 +76,7 @@ export default function ProjectsSection() {
       <div className="projects-header">
         <div className="reveal" ref={ref}>
           <div className="section-meta-tag">
-            <span className="section-num">05</span>
+            <span className="section-num">04</span>
             <span className="section-label">My Work</span>
           </div>
           <h2 className="section-title-xl">

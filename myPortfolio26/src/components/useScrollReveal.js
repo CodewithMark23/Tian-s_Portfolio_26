@@ -8,6 +8,18 @@ export default function useScrollReveal() {
     const el = ref.current;
     if (!el) return;
 
+    // Immediate check: if element is already in or near viewport, reveal right away
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('visible');
+      return;
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      el.classList.add('visible');
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -15,7 +27,7 @@ export default function useScrollReveal() {
           observer.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.05, rootMargin: '0px 0px -20px 0px' }
     );
 
     observer.observe(el);

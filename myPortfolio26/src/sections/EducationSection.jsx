@@ -17,10 +17,10 @@ export default function EducationSection() {
       aria-label="Education"
     >
       <div className="edu-text-inner reveal" ref={ref}>
-        <div className="section-meta-tag">
-          <span className="section-num">03</span>
-          <span className="section-label">Background</span>
-        </div>
+          <div className="section-meta-tag">
+            <span className="section-num">02</span>
+            <span className="section-label">Background</span>
+          </div>
 
         <h2 className="section-title-xl">
           HISTORY
