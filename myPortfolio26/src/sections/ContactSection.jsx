@@ -8,7 +8,7 @@ export default function ContactSection() {
     <section className="portfolio-section contact-section" id="contact" aria-label="Contact">
       <div className="contact-text reveal" ref={ref}>
         <div className="section-meta-tag">
-          <span className="section-num">06</span>
+          <span className="section-num">05</span>
           <span className="section-label">Get in Touch</span>
         </div>
 
@@ -25,15 +25,16 @@ export default function ContactSection() {
         </p>
 
         <div className="contact-actions">
-          <a href="mailto:tian@portfolio.dev" className="btn-primary">
-            Email Me ↗
+          <a href="mailto:chickennutbread10@gmail.com" className="btn-primary">
+            chickennutbread10@gmail.com ↗
           </a>
-          <a href="#" className="btn-ghost">
-            LinkedIn
+          <a href="mailto:markchristianvillanueva23@gmail.com" className="btn-ghost">
+            markchristianvillanueva23@gmail.com ↗
           </a>
         </div>
       </div>
 
+      {/* Decorative large text */}
       <div className="contact-deco" aria-hidden="true">TIAN</div>
     </section>
   );
