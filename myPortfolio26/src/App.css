@@ -621,26 +621,6 @@
 
 /* ═══════════════════════════════════════════════════════
    ABOUT ME SECTION (Profile Image Balanced 35–45%)
-═════════════════/* ═══════════════════════════════════════════════════════
-   TEXT SECTIONS (Introduction, Education)
-═══════════════════════════════════════════════════════ */
-.intro-text-section,
-.edu-text-section {
-  display: flex;
-  align-items: center;
-  padding: 5rem 4rem;
-  min-height: 60vh;
-  border-bottom: 1px solid var(--border);
-}
-
-.intro-text-inner,
-.edu-text-inner {
-  max-width: 720px;
-  width: 100%;
-}
-
-/* ═══════════════════════════════════════════════════════
-   ABOUT ME SECTION (Profile Image Balanced 35–45%)
 ═══════════════════════════════════════════════════════ */
 .about-me-section {
   min-height: 75vh;
@@ -810,8 +790,6 @@
   font-weight: 400;
   opacity: 0.75;
 }
-
-
 
 /* ═══════════════════════════════════════════════════════
    PROJECTS SECTION
@@ -1188,8 +1166,12 @@
 ═══════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  .skills-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .skills-intro-text { text-align: left; max-width: 100%; }
   .hero-section { padding: 3rem 2.5rem 2.5rem; }
-  .split-text-col { padding: 2.5rem; }
+  .about-me-section, .intro-text-section, .edu-text-section { padding: 4rem 2.5rem; }
+  .about-me-container { grid-template-columns: 1.2fr 1fr; gap: 2.5rem; }
+  .about-image-wrapper { max-width: 320px; }
   .skills-section, .projects-section, .contact-section { padding: 4rem 2.5rem; }
   .site-footer { padding: 2rem 2.5rem; }
 }
@@ -1206,24 +1188,69 @@
 
   .hero-section {
     grid-template-columns: 1fr;
-    padding: 2rem 1.5rem 4rem;
+    padding: 2.5rem 1.5rem 3.5rem;
     gap: 2rem;
   }
-  .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
-  .hero-image-col { justify-self: center; }
+  .hero-meta-bar {
+    position: static;
+    padding: 0;
+    margin-bottom: 1.25rem;
+  }
+  .hero-text {
+    padding-top: 0;
+  }
+  .hero-title { font-size: clamp(2.8rem, 13vw, 4.5rem); }
+  .hero-image-col { justify-self: center; align-self: center; }
   .hero-img-frame { width: 240px; height: 320px; }
   .hero-scroll { display: none; }
 
-  .split-section { grid-template-columns: 1fr; }
-  .split-section.reverse { direction: ltr; }
-  .split-img-col { min-height: 50vw; }
-  .split-text-col { border-left: none !important; border-right: none !important; border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; }
+  .hero-contact-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+  .hero-location {
+    border-right: none;
+    padding-right: 0;
+    margin-bottom: 0.2rem;
+  }
+
+  .intro-text-section,
+  .edu-text-section,
+  .about-me-section {
+    padding: 3rem 1.5rem;
+    min-height: auto;
+  }
+
+  .about-me-container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .about-image-col {
+    order: 2;
+  }
+  .about-image-wrapper {
+    max-width: 280px;
+    margin: 0 auto;
+  }
 
   .skills-grid { grid-template-columns: 1fr; }
   .skills-section, .projects-section { padding: 3rem 1.5rem; }
 
   .contact-section { flex-direction: column; padding: 3rem 1.5rem; gap: 2rem; }
   .contact-deco { display: none; }
+  .contact-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .contact-actions .btn-primary,
+  .contact-actions .btn-ghost {
+    width: 100%;
+    text-align: center;
+    font-size: 0.78rem;
+    word-break: break-all;
+  }
 
   .site-footer { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 1.5rem; text-align: center; }
   .footer-nav-links { justify-content: center; }
@@ -1245,4 +1272,13 @@
   }
   .nav-cta { display: none; }
   .nav-burger { display: flex; }
+}
+
+@media (max-width: 390px) {
+  .hero-title { font-size: 2.6rem; }
+  .hero-img-frame { width: 200px; height: 260px; }
+  .about-image-wrapper { max-width: 220px; }
+  .skill-card { padding: 1.8rem 1.4rem; }
+  .hero-contact-item { font-size: 0.65rem; }
+  .skills-section, .projects-section, .contact-section { padding: 2.5rem 1.25rem; }
 }
