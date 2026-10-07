@@ -1,5 +1,6 @@
 // ContactSection.jsx — Let's Connect
 import useScrollReveal from '../components/useScrollReveal';
+import CommissionForm from '../components/CommissionForm';
 
 export default function ContactSection() {
   const ref = useScrollReveal();
@@ -32,6 +33,8 @@ export default function ContactSection() {
             markchristianvillanueva23@gmail.com ↗
           </a>
         </div>
+
+        <CommissionForm />
       </div>
 
       {/* Decorative large text */}
