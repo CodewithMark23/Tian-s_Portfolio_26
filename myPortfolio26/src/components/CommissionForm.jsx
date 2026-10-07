@@ -1,6 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
+
+// ─── EmailJS Config ───────────────────────────────────────
+// Replace these three values after setting up EmailJS (see README below)
+const EMAILJS_SERVICE_ID = 'service_ql3nv5p';
+const EMAILJS_TEMPLATE_ID = 'template_rlm0o9o';
+const EMAILJS_PUBLIC_KEY = 'a_IDogfJ1pZvyx305';
+// ──────────────────────────────────────────────────────────
 
 export default function CommissionForm() {
+  const formRef = useRef(null);
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -10,12 +20,11 @@ export default function CommissionForm() {
     budgetRange: '',
     preferredDeadline: '',
     projectDescription: '',
-    referenceUrl: '',
     contactMethod: 'Email',
     agreement: false
   });
 
-  const [status, setStatus] = useState('idle'); // idle, sending, success, error
+  const [status, setStatus] = useState('idle'); // idle | sending | success | error
   const [errorMessage, setErrorMessage] = useState('');
 
   const projectTypes = [
@@ -55,18 +64,27 @@ export default function CommissionForm() {
     setStatus('sending');
     setErrorMessage('');
 
-    try {
-      const response = await fetch('http://localhost:3001/api/commission', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+    const templateParams = {
+      from_name: formData.fullName,
+      from_email: formData.email,
+      contact_number: formData.contactNumber || 'N/A',
+      company: formData.company || 'N/A',
+      project_type: formData.projectType,
+      budget_range: formData.budgetRange,
+      deadline: formData.preferredDeadline || 'N/A',
+      contact_method: formData.contactMethod,
+      message: formData.projectDescription,
+      reply_to: formData.email,
+      submitted_at: new Date().toLocaleString(),
+    };
 
-      if (!response.ok) {
-        throw new Error('Failed to send request');
-      }
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
 
       setStatus('success');
       setFormData({
@@ -78,12 +96,11 @@ export default function CommissionForm() {
         budgetRange: '',
         preferredDeadline: '',
         projectDescription: '',
-        referenceUrl: '',
         contactMethod: 'Email',
         agreement: false
       });
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error('EmailJS error:', err);
       setStatus('error');
       setErrorMessage('Something went wrong while sending your request. Please try again.');
     }
@@ -92,14 +109,12 @@ export default function CommissionForm() {
   if (status === 'success') {
     return (
       <div className="commission-success-card">
+        <div className="success-icon" aria-hidden="true">✓</div>
         <h3 className="commission-success-title">Request sent successfully!</h3>
         <p className="commission-success-text">
           Thanks for reaching out! Your commission request has been sent. I'll review the details and get back to you as soon as possible.
         </p>
-        <button 
-          className="btn-primary" 
-          onClick={() => setStatus('idle')}
-        >
+        <button className="btn-primary" onClick={() => setStatus('idle')}>
           Send Another Request
         </button>
       </div>
@@ -115,73 +130,81 @@ export default function CommissionForm() {
         </p>
       </div>
 
-      <form className="commission-form" onSubmit={handleSubmit}>
+      <form ref={formRef} className="commission-form" onSubmit={handleSubmit} noValidate>
+
         {status === 'error' && (
-          <div className="commission-error-msg">{errorMessage}</div>
+          <div className="commission-error-msg" role="alert">{errorMessage}</div>
         )}
 
+        {/* Row 1 — Name + Email */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="fullName">Full Name *</label>
-            <input 
-              type="text" 
-              id="fullName" 
-              name="fullName" 
-              required 
-              value={formData.fullName} 
-              onChange={handleChange} 
+            <label htmlFor="cf-fullName">Full Name <span className="req">*</span></label>
+            <input
+              type="text"
+              id="cf-fullName"
+              name="fullName"
+              required
+              autoComplete="name"
+              value={formData.fullName}
+              onChange={handleChange}
               className="form-input"
             />
           </div>
           <div className="form-group">
-            <label htmlFor="email">Email Address *</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              required 
-              value={formData.email} 
-              onChange={handleChange} 
+            <label htmlFor="cf-email">Email Address <span className="req">*</span></label>
+            <input
+              type="email"
+              id="cf-email"
+              name="email"
+              required
+              autoComplete="email"
+              value={formData.email}
+              onChange={handleChange}
               className="form-input"
             />
           </div>
         </div>
 
+        {/* Row 2 — Phone + Company */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="contactNumber">Contact Number</label>
-            <input 
-              type="tel" 
-              id="contactNumber" 
-              name="contactNumber" 
-              value={formData.contactNumber} 
-              onChange={handleChange} 
+            <label htmlFor="cf-contactNumber">Contact Number</label>
+            <input
+              type="tel"
+              id="cf-contactNumber"
+              name="contactNumber"
+              autoComplete="tel"
+              value={formData.contactNumber}
+              onChange={handleChange}
               className="form-input"
             />
           </div>
           <div className="form-group">
-            <label htmlFor="company">Company / Organization</label>
-            <input 
-              type="text" 
-              id="company" 
-              name="company" 
-              value={formData.company} 
-              onChange={handleChange} 
+            <label htmlFor="cf-company">Company / Organization</label>
+            <input
+              type="text"
+              id="cf-company"
+              name="company"
+              autoComplete="organization"
+              value={formData.company}
+              onChange={handleChange}
               className="form-input"
             />
           </div>
         </div>
 
+        {/* Row 3 — Project Type + Budget */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="projectType">Project Type *</label>
+            <label htmlFor="cf-projectType">Project Type <span className="req">*</span></label>
             <div className="custom-select-wrapper">
-              <select 
-                id="projectType" 
-                name="projectType" 
-                required 
-                value={formData.projectType} 
-                onChange={handleChange} 
+              <select
+                id="cf-projectType"
+                name="projectType"
+                required
+                value={formData.projectType}
+                onChange={handleChange}
                 className="form-input form-select"
               >
                 <option value="" disabled>Select Project Type</option>
@@ -192,14 +215,14 @@ export default function CommissionForm() {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="budgetRange">Budget Range *</label>
+            <label htmlFor="cf-budgetRange">Budget Range <span className="req">*</span></label>
             <div className="custom-select-wrapper">
-              <select 
-                id="budgetRange" 
-                name="budgetRange" 
-                required 
-                value={formData.budgetRange} 
-                onChange={handleChange} 
+              <select
+                id="cf-budgetRange"
+                name="budgetRange"
+                required
+                value={formData.budgetRange}
+                onChange={handleChange}
                 className="form-input form-select"
               >
                 <option value="" disabled>Select Budget Range</option>
@@ -211,26 +234,27 @@ export default function CommissionForm() {
           </div>
         </div>
 
+        {/* Row 4 — Deadline + Contact Method */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="preferredDeadline">Preferred Deadline</label>
-            <input 
-              type="date" 
-              id="preferredDeadline" 
-              name="preferredDeadline" 
-              value={formData.preferredDeadline} 
-              onChange={handleChange} 
+            <label htmlFor="cf-preferredDeadline">Preferred Deadline</label>
+            <input
+              type="date"
+              id="cf-preferredDeadline"
+              name="preferredDeadline"
+              value={formData.preferredDeadline}
+              onChange={handleChange}
               className="form-input"
             />
           </div>
           <div className="form-group">
-            <label htmlFor="contactMethod">Preferred Contact Method</label>
+            <label htmlFor="cf-contactMethod">Preferred Contact Method</label>
             <div className="custom-select-wrapper">
-              <select 
-                id="contactMethod" 
-                name="contactMethod" 
-                value={formData.contactMethod} 
-                onChange={handleChange} 
+              <select
+                id="cf-contactMethod"
+                name="contactMethod"
+                value={formData.contactMethod}
+                onChange={handleChange}
                 className="form-input form-select"
               >
                 {contactMethods.map(cm => (
@@ -241,30 +265,30 @@ export default function CommissionForm() {
           </div>
         </div>
 
-        <div className="form-group full-width">
-          <label htmlFor="projectDescription">Project Description *</label>
-          <textarea 
-            id="projectDescription" 
-            name="projectDescription" 
-            required 
+        {/* Project Description */}
+        <div className="form-group">
+          <label htmlFor="cf-projectDescription">Project Description <span className="req">*</span></label>
+          <textarea
+            id="cf-projectDescription"
+            name="projectDescription"
+            required
             rows="5"
             placeholder="Tell me about your project, goals, required features, design preferences, and anything else I should know."
-            value={formData.projectDescription} 
-            onChange={handleChange} 
+            value={formData.projectDescription}
+            onChange={handleChange}
             className="form-input form-textarea"
-          ></textarea>
+          />
         </div>
 
-
-
-        <div className="form-group full-width checkbox-group">
+        {/* Agreement */}
+        <div className="form-group checkbox-group">
           <label className="checkbox-label">
-            <input 
-              type="checkbox" 
-              name="agreement" 
-              required 
-              checked={formData.agreement} 
-              onChange={handleChange} 
+            <input
+              type="checkbox"
+              name="agreement"
+              required
+              checked={formData.agreement}
+              onChange={handleChange}
               className="form-checkbox"
             />
             <span className="checkbox-text">
@@ -274,14 +298,17 @@ export default function CommissionForm() {
         </div>
 
         <div className="form-actions">
-          <button 
-            type="submit" 
-            disabled={status === 'sending'} 
+          <button
+            type="submit"
+            disabled={status === 'sending'}
             className="btn-primary submit-btn"
           >
-            {status === 'sending' ? 'Sending...' : 'Send Commission Request'}
+            {status === 'sending'
+              ? <><span className="spinner" aria-hidden="true" /> Sending…</>
+              : 'Send Commission Request'}
           </button>
         </div>
+
       </form>
     </div>
   );
